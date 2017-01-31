@@ -7,6 +7,15 @@ RUN apt-get install -y gcc
 RUN curl https://bootstrap.pypa.io/get-pip.py | python
 RUN pip install jupyter notebook==4.2.1
 
+# Install the kernel
+ENV JUPYTER_DATA_DIR=/usr/local/jupyter
+
+WORKDIR /usr/local
+RUN git clone https://github.com/McJones/jupyter-swift-kernel.git swiftkernel
+RUN jupyter kernelspec install /usr/local/swiftkernel --user
+
+ENV PYTHONPATH=$PYTHONPATH:$JUPYTER_DATA_DIR/kernels/swiftkernel
+
 # Launchbot labels
 LABEL name.launchbot.io="swift test"
 LABEL workdir.launchbot.io="/usr/workdir"
